@@ -2,11 +2,13 @@ package com.EmployeeDashboard.employeeDashboard.service;
 
 import com.EmployeeDashboard.employeeDashboard.data.DataGenerator;
 import com.EmployeeDashboard.employeeDashboard.model.Employee;
+import com.EmployeeDashboard.employeeDashboard.model.PerformanceMetric;
 import com.EmployeeDashboard.employeeDashboard.repo.EmployeeRepository;
 import groovy.util.logging.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Component;
 
 
@@ -30,16 +32,12 @@ public class EmployeeService {
         return employeeRepository.findAll();
     }
 
-    public Employee getEmployeeById(String id) {
-        return employeeRepository.findById(id).orElse(null);
-    }
-
-    public List<Employee> getEmployeesByDepartment(String department) {
-        return employeeRepository.findByDepartment(department);
-    }
-
     public Employee addEmployee(Employee employee) {
         return employeeRepository.save(employee);
+    }
+
+    public List<PerformanceMetric> getPerformanceByDepartment() {
+        return employeeRepository.getPerformanceByDepartment();
     }
 
     public Employee updateEmployee(String id, Employee employee) {
@@ -54,49 +52,6 @@ public class EmployeeService {
         employeeRepository.deleteById(id);
     }
 
-    public List<Employee> getEmployeesByManagerId(String managerId) {
-        return employeeRepository.findByManagerId(managerId);
-    }
-
-    public List<Employee> getEmployeesByLocation(String location) {
-        return employeeRepository.findByLocation(location);
-    }
-
-    public List<Employee> getEmployeesByJoinDate(Date joinDate) {
-        return employeeRepository.findByJoinDate(joinDate);
-    }
-
-    public List<Employee> getEmployeesByLastPromotionDate(Date lastPromotionDate) {
-        return employeeRepository.findByLastPromotionDate(lastPromotionDate);
-    }
-
-    public List<Employee> getEmployeesByActiveStatus(boolean isActive) {
-        return employeeRepository.findByIsActive(isActive);
-    }
-
-    public List<Employee> getEmployeesByEmail(String email) {
-        return employeeRepository.findByEmail(email);
-    }
-
-    public List<Employee> getEmployeesByRole(String role) {
-        return employeeRepository.findByRole(role);
-    }
-
-    public List<Employee> getEmployeesByProductivity(int productivity) {
-        return employeeRepository.findByPerformanceProductivity(productivity);
-    }
-
-    public List<Employee> getEmployeesByGoalsCompleted(int goalsCompleted) {
-        return employeeRepository.findByPerformanceGoalsCompleted(goalsCompleted);
-    }
-
-    public List<Employee> getEmployeesByFeedbackScore(double feedbackScore) {
-        return employeeRepository.findByPerformanceFeedbackScore(feedbackScore);
-    }
-
-    public List<Employee> getEmployeesByPunctuality(String punctuality) {
-        return employeeRepository.findByPerformancePunctuality(punctuality);
-    }
 
     public void generateMockData() {
         try {

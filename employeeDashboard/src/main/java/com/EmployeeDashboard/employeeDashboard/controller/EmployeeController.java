@@ -2,6 +2,7 @@ package com.EmployeeDashboard.employeeDashboard.controller;
 
 
 import com.EmployeeDashboard.employeeDashboard.model.Employee;
+import com.EmployeeDashboard.employeeDashboard.model.PerformanceMetric;
 import com.EmployeeDashboard.employeeDashboard.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,11 +30,6 @@ public class EmployeeController {
         return employeeService.addEmployee(employee);
     }
 
-    @GetMapping("/{id}")
-    public Employee getEmployeeById(@PathVariable String id) {
-        return employeeService.getEmployeeById(id);
-    }
-
     @PutMapping("/{id}")
     public Employee updateEmployee(@PathVariable String id, @RequestBody Employee employee) {
         return employeeService.updateEmployee(id, employee);
@@ -42,6 +38,11 @@ public class EmployeeController {
     @DeleteMapping("/{id}")
     public void deleteEmployee(@PathVariable String id) {
         employeeService.deleteEmployee(id);
+    }
+
+    @GetMapping("/employees/department/performance")
+    public List<PerformanceMetric> getPerformanceByDepartment() {
+        return employeeService.getPerformanceByDepartment();
     }
 
     @GetMapping("/generateMockData")
