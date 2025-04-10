@@ -3,8 +3,7 @@ package com.EmployeeDashboard.employeeDashboard.data;
 import com.EmployeeDashboard.employeeDashboard.model.Employee;
 import com.EmployeeDashboard.employeeDashboard.model.PerformanceMetric;
 import com.EmployeeDashboard.employeeDashboard.repo.EmployeeRepository;
-import com.github.javafaker.Faker;
-import jakarta.annotation.PostConstruct;
+import net.datafaker.Faker;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -32,12 +31,16 @@ public class DataGenerator implements CommandLineRunner {
 
         for (int i = 0; i < 50; i++) {
             Employee employee = new Employee();
+            employee.setAvatarUrl(faker.avatar().image());
             employee.setId(faker.idNumber().valid());
             employee.setName(faker.name().fullName());
             employee.setEmail(faker.internet().emailAddress());
             employee.setDepartment(faker.options().option("Engineering", "HR", "Finance", "Marketing"));
             employee.setRole(faker.job().title());
-            employee.setJoinDate(faker.date().past(365 * 3, TimeUnit.DAYS)); // Joined in the last 3 years
+            employee.setJoinDate(faker.date().past(365 * 3, TimeUnit.DAYS));
+            employee.setManagerId(faker.idNumber().valid());
+            employee.setLocation(faker.address().city());
+            employee.setLastPromotionDate(faker.date().past(365 * 2, 365, TimeUnit.DAYS));
             employee.setPerformance(generatePerformanceMetrics());
             employee.setActive(faker.bool().bool());
 
@@ -53,6 +56,9 @@ public class DataGenerator implements CommandLineRunner {
             metric.setProductivity(faker.number().numberBetween(60, 100));
             metric.setGoalsCompleted(faker.number().numberBetween(1, 5));
             metric.setFeedbackScore(faker.number().randomDouble(1, 3, 5));
+            metric.setKeyAchievements(List.of(faker.lorem().sentence(5),
+                    faker.lorem().sentence(5),
+                    faker.lorem().sentence(5)));
             metrics.add(metric);
         }
         return metrics;

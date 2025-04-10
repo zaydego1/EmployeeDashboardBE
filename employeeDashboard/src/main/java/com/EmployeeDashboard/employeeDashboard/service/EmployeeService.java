@@ -2,6 +2,7 @@ package com.EmployeeDashboard.employeeDashboard.service;
 
 import com.EmployeeDashboard.employeeDashboard.data.DataGenerator;
 import com.EmployeeDashboard.employeeDashboard.model.Employee;
+import com.EmployeeDashboard.employeeDashboard.model.PerformanceByDept;
 import com.EmployeeDashboard.employeeDashboard.model.PerformanceMetric;
 import com.EmployeeDashboard.employeeDashboard.repo.EmployeeRepository;
 import groovy.util.logging.Slf4j;
@@ -36,7 +37,7 @@ public class EmployeeService {
         return employeeRepository.save(employee);
     }
 
-    public List<PerformanceMetric> getPerformanceByDepartment() {
+    public List<PerformanceByDept> getPerformanceByDepartment() {
         return employeeRepository.getPerformanceByDepartment();
     }
 

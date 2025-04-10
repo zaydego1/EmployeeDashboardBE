@@ -2,6 +2,7 @@ package com.EmployeeDashboard.employeeDashboard.controller;
 
 
 import com.EmployeeDashboard.employeeDashboard.model.Employee;
+import com.EmployeeDashboard.employeeDashboard.model.PerformanceByDept;
 import com.EmployeeDashboard.employeeDashboard.model.PerformanceMetric;
 import com.EmployeeDashboard.employeeDashboard.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,7 @@ public class EmployeeController {
     }
 
     @GetMapping("/employees/department/performance")
-    public List<PerformanceMetric> getPerformanceByDepartment() {
+    public List<PerformanceByDept> getPerformanceByDepartment() {
         return employeeService.getPerformanceByDepartment();
     }
 

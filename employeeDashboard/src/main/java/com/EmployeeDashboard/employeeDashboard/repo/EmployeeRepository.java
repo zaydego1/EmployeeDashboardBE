@@ -1,37 +1,36 @@
 package com.EmployeeDashboard.employeeDashboard.repo;
 
 import com.EmployeeDashboard.employeeDashboard.model.Employee;
+import com.EmployeeDashboard.employeeDashboard.model.PerformanceByDept;
 import com.EmployeeDashboard.employeeDashboard.model.PerformanceMetric;
+import org.springframework.data.mongodb.repository.Aggregation;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.Date;
 import java.util.List;
 
 @Repository
 public interface EmployeeRepository extends MongoRepository<Employee, String> {
 
-    String performanceByDept = "[\n" +
-            "  {\n" +
-            "    $unwind: \"$performance\"\n" +
-            "  },\n" +
-            "  {\n" +
-            "    $group: {\n" +
-            "      _id: \"$department\",\n" +
-            "      totalProductivity: {\n" +
-            "        $avg: \"$performance.productivity\"\n" +
-            "      },\n" +
-            "      totalGoalsCompleted: {\n" +
-            "        $avg: \"$performance.goalsCompleted\"\n" +
-            "      },\n" +
-            "      averageFeedbackScore: {\n" +
-            "        $avg: \"$performance.feedbackScore\"\n" +
-            "      }\n" +
-            "    }\n" +
-            "  }\n" +
-            "]";
-
-    @Query(performanceByDept)
-    public List<PerformanceMetric> getPerformanceByDepartment();
+    @Aggregation(pipeline = {
+            "{ $unwind: '$performance' }",
+            "{ $match: { " +
+                    "'performance.productivity': { $exists: true, $type: 'number' }, " +
+                    "'performance.goalsCompleted': { $exists: true, $type: 'number' }, " +
+                    "'performance.feedbackScore': { $exists: true, $type: 'number' } " +
+                    "}}",
+            "{ $group: { " +
+                    "_id: '$department', " +
+                    "avgProductivity: { $avg: '$performance.productivity' }, " +
+                    "avgGoalsCompleted: { $avg: '$performance.goalsCompleted' }, " +
+                    "avgFeedbackScore: { $avg: '$performance.feedbackScore' } " +
+                    "}}",
+            "{ $project: { " +
+                    "_id: 1, " +
+                    "avgProductivity: { $round: ['$avgProductivity', 2] }, " +
+                    "avgGoalsCompleted: { $round: ['$avgGoalsCompleted', 2] }, " +
+                    "avgFeedbackScore: { $round: ['$avgFeedbackScore', 2] } " +
+                    "}}"
+    })
+    List<PerformanceByDept> getPerformanceByDepartment();
 }
